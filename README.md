@@ -1,11 +1,11 @@
 # Portfolio Blog Starter
 
-This is a porfolio site template complete with a blog. Includes:
+This is a portfolio site template complete with a blog. Includes:
 
 - MDX and Markdown support
 - Optimized for SEO (sitemap, robots, JSON-LD schema)
 - RSS Feed
-- Dynamic OG images
+- Dynamic OG images using [imgix](www.imgix.com)
 - Syntax highlighting
 - Tailwind v4
 - Vercel Speed Insights / Web Analytics
@@ -27,16 +27,25 @@ Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_mediu
 
 ### Clone and Deploy
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [pnpm](https://pnpm.io/installation) to bootstrap the example:
+Clone the repository from GitHub
 
 ```bash
-pnpm create next-app --example https://github.com/vercel/examples/tree/main/solutions/blog blog
+git clone git@github.com:luqven/nextjs-blog-starter.git
 ```
 
-Then, run Next.js in development mode:
+Deploy it to the cloud with [Vercel](https://vercel.com/templates) ([Documentation](https://nextjs.org/docs/app/building-your-application/deploying)).
+
+### Development
+
+> [!NOTE]
+> Please ensure you've configured the [environment variables](./.env.example) upon deployment or when developing locally.
+
+Run Next.js in development mode:
 
 ```bash
 pnpm dev
 ```
 
-Deploy it to the cloud with [Vercel](https://vercel.com/templates) ([Documentation](https://nextjs.org/docs/app/building-your-application/deploying)).
+---
+
+Forked from Vercel's `vercel/examples` [repository](https://github.com/vercel/examples/tree/main/solutions/blog).
