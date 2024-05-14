@@ -5,6 +5,7 @@ import { baseUrl } from "app/sitemap";
 import { getViewsCount } from "app/db/queries";
 import { increment } from "app/db/actions";
 import { Suspense, cache } from "react";
+import { ixOgImage } from "../../og/image";
 
 export async function generateStaticParams() {
   let posts = getBlogPosts();
@@ -35,7 +36,7 @@ export async function generateMetadata({ params }) {
   } = post.metadata;
   let ogImage = image
     ? image
-    : `${baseUrl}/og?title=${encodeURIComponent(title)}`;
+    : ixOgImage({ title, description, views: views?.count });
 
   return {
     title,
