@@ -2,6 +2,9 @@ import { notFound } from "next/navigation";
 import { CustomMDX } from "app/components/mdx";
 import { formatDate, getBlogPosts } from "app/blog/utils";
 import { baseUrl } from "app/sitemap";
+import { getViewsCount } from "app/db/queries";
+import { increment } from "app/db/actions";
+import { Suspense, cache } from "react";
 
 export async function generateStaticParams() {
   let posts = getBlogPosts();
@@ -11,8 +14,15 @@ export async function generateStaticParams() {
   }));
 }
 
-export function generateMetadata({ params }) {
+export async function generateMetadata({ params }) {
   let post = getBlogPosts().find((post) => post.slug === params.slug);
+
+  let allViews = await getViewsCount();
+  let views = allViews.find((view) => view.slug === post?.slug);
+
+  // Uncomment to test
+  // console.log({ views });
+
   if (!post) {
     return;
   }
@@ -89,10 +99,42 @@ export default function Blog({ params }) {
         <p className="text-sm text-neutral-600 dark:text-neutral-400">
           {formatDate(post.metadata.publishedAt)}
         </p>
+        <Suspense fallback={<p className="h-5" />}>
+          <Views slug={post.slug} />
+        </Suspense>
       </div>
       <article className="prose">
         <CustomMDX source={post.content} />
       </article>
     </section>
   );
+}
+
+function ViewCounter({
+  slug,
+  allViews,
+}: {
+  slug: string;
+  allViews: {
+    slug: string;
+    count: number;
+  }[];
+  trackView?: boolean;
+}) {
+  const viewsForSlug = allViews && allViews.find((view) => view.slug === slug);
+  const number = new Number(viewsForSlug?.count || 0);
+
+  return (
+    <p className="text-neutral-600 dark:text-neutral-400">
+      {`${number.toLocaleString()} views`}
+    </p>
+  );
+}
+
+let incrementViews = cache(increment);
+
+async function Views({ slug }: { slug: string }) {
+  let views = await getViewsCount();
+  incrementViews(slug);
+  return <ViewCounter allViews={views} slug={slug} />;
 }
